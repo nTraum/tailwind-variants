@@ -142,7 +142,7 @@ defmodule TailwindVariants do
   end
 
   @doc """
-  Applies props to a component to generate class names.
+  Applies props to a component to generate class names or simply merges Tailwind classes.
 
   ## Parameters
 
@@ -171,12 +171,23 @@ defmodule TailwindVariants do
       ...> })
       iex> tw(component, %{color: "primary"})
       "font-medium bg-blue-500"
+
+      iex> tw("p-3", "p-4 text-red-500")
+      "p-4 text-red-500"
+
   """
   def tw(component_or_slot, props \\ %{})
 
   # Slot function map case
   def tw(slot_fn, props) when is_function(slot_fn, 1) do
     slot_fn.(props)
+  end
+
+  def tw(classes1, classes2)
+      when (is_list(classes1) or is_binary(classes1) or is_nil(classes1)) and
+             (is_list(classes2) or is_binary(classes2) or is_nil(classes2)) do
+    classes = List.wrap(classes1) ++ List.wrap(classes2)
+    Utils.merge_class_names(classes, %{tw_merge: true})
   end
 
   # Direct class merging - string or list of classes

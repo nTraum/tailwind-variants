@@ -53,6 +53,7 @@ defmodule TailwindVariants.TestAssertions do
   Empty or nil values are filtered out.
   """
   def normalize_classes(nil), do: []
+  def normalize_classes([]), do: []
   def normalize_classes(""), do: []
 
   def normalize_classes(classes) when is_binary(classes) do

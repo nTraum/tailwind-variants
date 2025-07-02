@@ -197,6 +197,24 @@ defmodule TailwindVariantsTest do
       # Should just concatenate classes without merging
       assert_classes_match("p-4 text-red-500 p-6 text-lg", classes)
     end
+
+    test "merges classes when given as strings, lists or nils" do
+      class1_str = "p-3"
+      class1_list = ["p-3"]
+
+      class2_str = "p-4 text-red-500"
+      class2_list = ["p-4", "text-red-500"]
+      class2_list_joined = ["p-4 text-red-500"]
+
+      assert_classes_match("p-4 text-red-500", tw(class1_str, class2_str))
+      assert_classes_match("p-4 text-red-500", tw(class1_str, class2_list))
+      assert_classes_match("p-4 text-red-500", tw(class1_list, class2_list))
+      assert_classes_match("p-4 text-red-500", tw(class1_str, class2_list_joined))
+      assert_classes_match("p-4 text-red-500", tw(nil, class2_str))
+
+      assert_classes_match("p-3", tw(class1_str, nil))
+      assert_classes_match([], tw(nil, nil))
+    end
   end
 
   describe "tw/2 - compound variants" do
